@@ -65,6 +65,7 @@ def transcribe():
     # 异步运行转写任务
     def run_transcription():
         subprocess.run(["python", "SenseVoiceSmall.py", audio_path])
+        time.sleep(5)
         subprocess.run(["python", "transcription.py"])
     
     threading.Thread(target=run_transcription).start()

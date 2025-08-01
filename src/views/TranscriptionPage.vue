@@ -16,7 +16,7 @@
     <!-- 对话内容区域 -->
     <div class="border-2 border-dashed border-border rounded-xl p-6 mb-8 min-h-[300px]">
       <div class="mb-6">
-        <p class="text-gray-600 text-lg">{{ transcription }}</p>
+        <p class="text-gray-600 text-lg" v-html="transcription"></p>
       </div>
     </div>
 
