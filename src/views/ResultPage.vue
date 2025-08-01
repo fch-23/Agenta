@@ -390,7 +390,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $main-green: #95c11f;
 $main-green-light: #f7faf7;
 $main-green-dark: #195c3e;
