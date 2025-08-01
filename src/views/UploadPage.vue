@@ -301,15 +301,21 @@ export default {
         // 保存会议名称
         const formData = new FormData()
         formData.append('meeting_name', meetingName.value)
-
         await axios.post('/api/save_meeting_name', formData)
-        
-        // 跳转到转写页面
+
+        // 调用后端 /api/transcribe 接口
         const filename = encodeURIComponent(uploadedFilename.value || selectedFile.value.name)
-        router.push(`/transcribe?filename=${filename}`)
+        const response = await axios.get(`/api/transcribe?filename=${filename}`)
+        // 跳转到转写页面（如果后端返回页面则直接跳转）
+        if (response && response.request && response.request.responseURL) {
+          window.location.href = response.request.responseURL
+        } else {
+          // 兜底跳转
+          router.push(`/transcribe?filename=${filename}`)
+        }
       } catch (error) {
-        console.error('保存会议名称失败:', error)
-        // 即使保存失败也继续跳转
+        console.error('转写接口调用失败:', error)
+        // 即使失败也继续跳转
         const filename = encodeURIComponent(uploadedFilename.value || selectedFile.value.name)
         router.push(`/transcribe?filename=${filename}`)
       }

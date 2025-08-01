@@ -91,7 +91,7 @@ export default {
           // 更新进度为100%
           progressBarWidth.value = 100
           progressText.value = '转写完成'
-          transcription.value = data.transcription
+          transcription.value = data.transcription.replace(/\n/g, '<br>')
           isCompleted.value = true
         }
       } catch (error) {

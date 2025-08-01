@@ -2,7 +2,6 @@
 /__pycache__
 /transcription_result.txt
 /uploads
-/prompt_tra.txt
 /intermediate_results.json
 /combined_output.txt
 /meeting_info.txt
@@ -14,3 +13,4 @@
 /custom.md
 /title.txt
 /node_modules
+/dist
