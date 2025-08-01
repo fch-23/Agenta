@@ -1,0 +1,27 @@
+{
+  "name": "agenta-vue3",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Agenta会议纪要生成系统 - Vue3版本",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4",
+    "axios": "^1.4.0",
+    "marked": "^5.0.0",
+    "highlight.js": "^11.8.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "vite": "^4.4.5",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.27",
+    "tailwindcss": "^3.3.3"
+  }
+} 

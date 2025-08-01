@@ -1,0 +1,17 @@
+/model
+/__pycache__
+/transcription_result.txt
+/uploads
+/prompt_tra.txt
+/intermediate_results.json
+/combined_output.txt
+/meeting_info.txt
+/meeting_type.txt
+/template_custom.md
+/user_prompt.txt
+/key_points_output.txt
+/summary.md
+/custom.md
+/title.txt
+/node_modules
+/dist
