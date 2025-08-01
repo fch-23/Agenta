@@ -15,13 +15,17 @@
     "vue-router": "^4.2.4",
     "axios": "^1.4.0",
     "marked": "^5.0.0",
-    "highlight.js": "^11.8.0"
+    "highlight.js": "^11.8.0",
+    "@tiptap/starter-kit": "^2.0.0",
+    "@tiptap/vue-3": "^2.0.0",
+    "openai": "^4.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
     "vite": "^4.4.5",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.27",
-    "tailwindcss": "^3.3.3"
+    "tailwindcss": "^3.3.3",
+    "sass": "^1.64.0"
   }
-} 
+}
