@@ -7,7 +7,7 @@ import subprocess
 import secrets
 
 app = Flask(__name__)
-CORS(app)  # 新增CORS配置，允许跨域请求
+CORS(app, supports_credentials=True)
 UPLOAD_FOLDER = 'uploads'
 LOG_FILE = 'processing.log'
 if not os.path.exists(UPLOAD_FOLDER):
@@ -64,9 +64,7 @@ def transcribe():
     
     # 异步运行转写任务
     def run_transcription():
-        subprocess.run(["python", "SenseVoiceSmall.py", audio_path])
-        time.sleep(5)
-        subprocess.run(["python", "transcription.py"])
+        subprocess.run(["python", "combined_transcription.py", audio_path])
     
     threading.Thread(target=run_transcription).start()
     

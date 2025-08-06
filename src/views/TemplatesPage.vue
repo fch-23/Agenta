@@ -299,7 +299,7 @@ export default {
           requirements: requirements.value || ''
         }
 
-        await axios.post('/api/save_meeting_info', meetingInfo)
+        await axios.post('/api/save_meeting_info', meetingInfo, { withCredentials: true })
 
         console.log('会议信息保存成功')
         router.push('/result')

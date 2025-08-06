@@ -9,6 +9,9 @@ import TranscriptionPage from './views/TranscriptionPage.vue'
 import TemplatesPage from './views/TemplatesPage.vue'
 import ResultPage from './views/ResultPage.vue'
 
+import axios from 'axios'
+axios.defaults.withCredentials = true  // 全局允许携带Cookie
+
 // 创建路由
 const routes = [
   { path: '/', component: UploadPage },

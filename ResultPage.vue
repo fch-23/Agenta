@@ -163,35 +163,25 @@ export default defineComponent({
     },
     markdownHtml() {
       if (!this.editor) return ''
+      // 获取纯文本内容并去除多余的 <p> 标签
       const raw = this.editor.getHTML()
-
-      // 改进的HTML转Markdown逻辑
+      // 提取编辑器内容中的纯 markdown 部分
+      // 这里假设内容是 <p>...</p> 包裹的 markdown
+      // 可以用正则去除所有 <p> 标签
       const markdownText = raw
-        // 段落：</p>后加两个换行（区分段落），<p>前不加（避免多余空行）
-        .replace(/<\/p>/g, '\n\n')
-        .replace(/<p[^>]*>/g, '')
-        // 换行标签：<br>替换为Markdown强制换行（结尾加两个空格+换行）
-        .replace(/<br\s*\/?>/g, '  \n')
-        // 列表项：保留原有结构，避免破坏换行
-        .replace(/<li[^>]*>/g, '- ')
-        .replace(/<\/li>/g, '\n')
-        .replace(/<\/?ul>/g, '\n')
-        .replace(/<\/?ol>/g, '\n')
-        // 标题：转换为Markdown标题格式（#）
-        .replace(/<h1[^>]*>(.*?)<\/h1>/g, '# $1\n\n')
-        .replace(/<h2[^>]*>(.*?)<\/h2>/g, '## $1\n\n')
-        .replace(/<h3[^>]*>(.*?)<\/h3>/g, '### $1\n\n')
-        // 其他标签处理（保持原逻辑）
+        .replace(/<\/?p>/g, '\n')
+        .replace(/<br\s*\/?>/g, '\n')
         .replace(/<\/?strong>/g, '**')
         .replace(/<\/?em>/g, '*')
         .replace(/<\/?u>/g, '')
         .replace(/<\/?s>/g, '~~')
+        .replace(/<\/?ul>/g, '')
+        .replace(/<\/?ol>/g, '')
+        .replace(/<\/?li>/g, '\n- ')
+        .replace(/<\/?h[1-6]>/g, '\n')
         .replace(/&nbsp;/g, ' ')
-        .replace(/<[^>]+>/g, '') // 清除剩余标签
+        .replace(/<[^>]+>/g, '') // 去除其它标签
         .trim()
-        // 合并多余空行（最多保留两个连续换行）
-        .replace(/\n{3,}/g, '\n\n')
-
       return marked.parse(markdownText)
     }
   },
