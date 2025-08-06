@@ -11,11 +11,7 @@
       <div>
         <label class="block text-neutral mb-2">会议时间</label>
         <div class="relative">
-          <input 
-            v-model="meetingTime"
-            type="datetime-local" 
-            class="form-input-style"
-          >
+          <input v-model="meetingTime" type="datetime-local" class="form-input-style">
           <div class="absolute left-3 top-1/2 -translate-y-1/2 text-neutral">
             <i class="fa fa-calendar"></i>
           </div>
@@ -26,12 +22,7 @@
       <div>
         <label class="block text-neutral mb-2">参会人员</label>
         <div class="relative">
-          <input 
-            v-model="participants"
-            type="text" 
-            placeholder="输入参会人员姓名" 
-            class="form-input-style"
-          >
+          <input v-model="participants" type="text" placeholder="输入参会人员姓名" class="form-input-style">
           <div class="absolute left-3 top-1/2 -translate-y-1/2 text-neutral">
             <i class="fa fa-user"></i>
           </div>
@@ -42,12 +33,7 @@
       <div>
         <label class="block text-neutral mb-2">记录人</label>
         <div class="relative">
-          <input 
-            v-model="recorder"
-            type="text" 
-            placeholder="输入记录人" 
-            class="form-input-style"
-          >
+          <input v-model="recorder" type="text" placeholder="输入记录人" class="form-input-style">
           <div class="absolute left-3 top-1/2 -translate-y-1/2 text-neutral">
             <i class="fa fa-pencil"></i>
           </div>
@@ -59,38 +45,25 @@
         <label class="block text-neutral mb-2">会议类型</label>
         <div class="relative">
           <!-- 自定义下拉选择框 -->
-          <div 
-            @click="toggleDropdown"
-            class="form-input-style cursor-pointer"
-          >
-            <span 
-              :class="selectedMeetingType ? 'text-gray-800' : 'text-placeholder'"
-            >
+          <div @click="toggleDropdown" class="form-input-style cursor-pointer">
+            <span :class="selectedMeetingType ? 'text-gray-800' : 'text-placeholder'">
               {{ selectedMeetingTypeText }}
             </span>
           </div>
           <div class="absolute left-3 top-1/2 -translate-y-1/2 text-neutral">
             <i class="fa fa-list-ul"></i>
           </div>
-          <div 
-            @click="toggleDropdown"
+          <div @click="toggleDropdown"
             class="absolute right-3 top-1/2 -translate-y-1/2 text-primary cursor-pointer transition-transform duration-300"
-            :class="{ 'rotate-180': isDropdownOpen }"
-          >
+            :class="{ 'rotate-180': isDropdownOpen }">
             <i class="fa fa-chevron-down"></i>
           </div>
           <!-- 下拉选项列表 -->
-          <div 
-            v-show="isDropdownOpen"
-            class="absolute left-0 right-0 top-full mt-1 bg-white border border-border rounded-lg dropdown-shadow z-10"
-          >
+          <div v-show="isDropdownOpen"
+            class="absolute left-0 right-0 top-full mt-1 bg-white border border-border rounded-lg dropdown-shadow z-10">
             <ul class="py-1">
-              <li 
-                v-for="option in meetingTypeOptions" 
-                :key="option.value"
-                @click="selectMeetingType(option)"
-                class="px-4 py-2 hover:bg-gray-50 cursor-pointer"
-              >
+              <li v-for="option in meetingTypeOptions" :key="option.value" @click="selectMeetingType(option)"
+                class="px-4 py-2 hover:bg-gray-50 cursor-pointer">
                 {{ option.text }}
               </li>
             </ul>
@@ -99,29 +72,17 @@
 
         <!-- 自定义会议类型的文件上传区域 -->
         <div v-if="selectedMeetingType === 'custom'" class="mt-4 animate-fadeIn">
-          <div 
-            ref="dropArea"
+          <div ref="dropArea"
             class="border border-dashed border-border rounded-lg p-4 text-center bg-gray-50 transition-all duration-300"
-            :class="{ 'border-primary bg-primary/5': isDragOver }"
-            @drop="handleDrop"
-            @dragover.prevent="isDragOver = true"
-            @dragleave.prevent="isDragOver = false"
-            @dragenter.prevent="isDragOver = true"
-          >
+            :class="{ 'border-primary bg-primary/5': isDragOver }" @drop="handleDrop"
+            @dragover.prevent="isDragOver = true" @dragleave.prevent="isDragOver = false"
+            @dragenter.prevent="isDragOver = true">
             <i class="fa fa-cloud-upload text-2xl text-neutral mb-2"></i>
             <p class="text-sm text-neutral mb-3">上传自定义的模板文件</p>
             <p class="text-xs text-neutral-400 mb-4">支持的格式：markdown</p>
-            <input 
-              ref="customFileInput"
-              type="file" 
-              class="hidden" 
-              accept=".md,.markdown"
-              @change="handleFileSelect"
-            >
-            <button 
-              @click="$refs.customFileInput.click()"
-              class="bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-primary/90 transition-colors"
-            >
+            <input ref="customFileInput" type="file" class="hidden" accept=".md,.markdown" @change="handleFileSelect">
+            <button @click="$refs.customFileInput.click()"
+              class="bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-primary/90 transition-colors">
               选择文件
             </button>
             <div v-if="fileInfo.show" class="mt-2 text-sm" :class="fileInfo.class">
@@ -135,12 +96,7 @@
       <div>
         <label class="block text-neutral mb-2">个性化要求</label>
         <div class="relative">
-          <input 
-            v-model="requirements"
-            type="text" 
-            placeholder="输入个性化要求" 
-            class="form-input-style"
-          >
+          <input v-model="requirements" type="text" placeholder="输入个性化要求" class="form-input-style">
           <div class="absolute left-3 top-1/2 -translate-y-1/2 text-neutral">
             <i class="fa fa-heart-o"></i>
           </div>
@@ -169,7 +125,7 @@ export default {
   name: 'TemplatesPage',
   setup() {
     const router = useRouter()
-    
+
     // 响应式数据
     const meetingTime = ref('')
     const participants = ref('')
@@ -178,7 +134,7 @@ export default {
     const requirements = ref('')
     const isDropdownOpen = ref(false)
     const isDragOver = ref(false)
-    
+
     const fileInfo = ref({
       show: false,
       text: '',
@@ -213,7 +169,7 @@ export default {
     const handleDrop = (e) => {
       e.preventDefault()
       isDragOver.value = false
-      
+
       const files = e.dataTransfer.files
       if (files.length > 0) {
         handleFile(files[0])
@@ -239,7 +195,7 @@ export default {
           formData.append('file', file)
 
           const response = await axios.post('/api/upload_custom_template', formData)
-          
+
           if (response.data.success) {
             fileInfo.value = {
               show: true,
@@ -267,12 +223,12 @@ export default {
           text: '错误: 仅支持.md和.markdown格式',
           class: 'text-red-500'
         }
-        
+
         // 清空选中的文件
         if (this.$refs.customFileInput) {
           this.$refs.customFileInput.value = ''
         }
-        
+
         setTimeout(() => {
           fileInfo.value.show = false
         }, 3000)
@@ -300,6 +256,9 @@ export default {
         }
 
         await axios.post('/api/save_meeting_info', meetingInfo, { withCredentials: true })
+
+        // 新增：调用 /api/result 触发 summary.py
+        await axios.post('/api/result')
 
         console.log('会议信息保存成功')
         router.push('/result')
@@ -345,4 +304,4 @@ export default {
     }
   }
 }
-</script> 
+</script>

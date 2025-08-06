@@ -8,32 +8,19 @@
 
     <!-- 文件上传区域 -->
     <div class="max-w-3xl mx-auto">
-      <div 
-        ref="dropArea"
+      <div ref="dropArea"
         class="border-2 border-dashed border-gray-300 rounded-lg p-10 text-center cursor-pointer hover:border-primary transition-all duration-300"
-        :class="{ 'border-primary bg-primary/5': isDragOver }"
-        @drop="handleDrop"
-        @dragover.prevent="isDragOver = true"
-        @dragleave.prevent="isDragOver = false"
-        @dragenter.prevent="isDragOver = true"
-      >
+        :class="{ 'border-primary bg-primary/5': isDragOver }" @drop="handleDrop" @dragover.prevent="isDragOver = true"
+        @dragleave.prevent="isDragOver = false" @dragenter.prevent="isDragOver = true">
         <i class="fa fa-cloud-upload text-5xl text-gray-400 mb-4"></i>
         <h3 class="text-xl font-semibold text-neutral mb-2">拖放文件到此处</h3>
         <p class="text-gray-500 mb-6">或者</p>
-        <label 
-          for="fileInput"
-          class="inline-block bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg cursor-pointer transition-all duration-300 shadow-md hover:shadow-lg"
-        >
+        <label for="fileInput"
+          class="inline-block bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg cursor-pointer transition-all duration-300 shadow-md hover:shadow-lg">
           <i class="fa fa-file-o mr-2"></i>选择文件
         </label>
-        <input 
-          ref="fileInput"
-          type="file" 
-          id="fileInput" 
-          class="hidden" 
-          accept=".mp3,.wav,.m4a,.flac,.wma"
-          @change="handleFileSelect"
-        >
+        <input ref="fileInput" type="file" id="fileInput" class="hidden" accept=".mp3,.wav,.m4a,.flac,.wma"
+          @change="handleFileSelect">
         <p class="text-gray-400 text-sm mt-4">支持的格式：MP3、WAV、M4A/FLAC、WMA</p>
       </div>
 
@@ -42,10 +29,7 @@
         <div class="border border-gray-200 rounded-lg overflow-hidden shadow-sm">
           <div class="bg-gray-50 px-4 py-3 flex justify-between items-center">
             <h4 class="font-medium text-neutral">{{ selectedFile.name }}</h4>
-            <button 
-              @click="clearFileSelection"
-              class="text-gray-400 hover:text-red-500 transition-all duration-200"
-            >
+            <button @click="clearFileSelection" class="text-gray-400 hover:text-red-500 transition-all duration-200">
               <i class="fa fa-times"></i>
             </button>
           </div>
@@ -71,10 +55,8 @@
             <!-- 上传进度条 -->
             <div v-if="isUploading" class="mt-4">
               <div class="w-full bg-gray-200 rounded-full h-2.5">
-                <div 
-                  class="bg-primary h-2.5 rounded-full transition-all duration-300" 
-                  :style="{ width: uploadProgress + '%' }"
-                ></div>
+                <div class="bg-primary h-2.5 rounded-full transition-all duration-300"
+                  :style="{ width: uploadProgress + '%' }"></div>
               </div>
               <p class="text-xs text-gray-500 mt-1 text-right">{{ Math.round(uploadProgress) }}%</p>
             </div>
@@ -84,10 +66,8 @@
 
       <!-- 上传按钮 -->
       <div v-if="selectedFile && !isUploading" class="mt-6 text-center animate-fadeIn">
-        <button 
-          @click="uploadFile"
-          class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mx-auto"
-        >
+        <button @click="uploadFile"
+          class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center mx-auto">
           <i class="fa fa-upload mr-2"></i>
           <span>上传文件</span>
         </button>
@@ -95,10 +75,7 @@
 
       <!-- 上传状态反馈 -->
       <div v-if="statusMessage.show" class="mb-8 animate-fadeIn">
-        <div 
-          class="p-4 rounded-lg flex items-center"
-          :class="statusMessage.class"
-        >
+        <div class="p-4 rounded-lg flex items-center" :class="statusMessage.class">
           <i :class="statusMessage.icon" class="mr-3 text-xl"></i>
           <p>{{ statusMessage.text }}</p>
         </div>
@@ -108,12 +85,8 @@
       <div class="mb-6">
         <label class="block text-neutral mb-3">会议名称</label>
         <div class="relative">
-          <input 
-            v-model="meetingName"
-            type="text" 
-            placeholder="点击输入（非必填）"
-            class="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-          >
+          <input v-model="meetingName" type="text" placeholder="点击输入（非必填）"
+            class="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
         </div>
         <p v-if="nameSaveStatus.show" class="mt-2 text-sm" :class="nameSaveStatus.class">
           {{ nameSaveStatus.text }}
@@ -139,7 +112,7 @@ export default {
   name: 'UploadPage',
   setup() {
     const router = useRouter()
-    
+
     // 响应式数据
     const selectedFile = ref(null)
     const isDragOver = ref(false)
@@ -148,7 +121,7 @@ export default {
     const meetingName = ref('')
     const showTranscriptionHint = ref(false)
     const uploadedFilename = ref('')
-    
+
     const statusMessage = ref({
       show: false,
       text: '',
@@ -156,7 +129,7 @@ export default {
       class: '',
       icon: ''
     })
-    
+
     const nameSaveStatus = ref({
       show: false,
       text: '',
@@ -166,7 +139,7 @@ export default {
     // 计算属性
     const fileIconClass = computed(() => {
       if (!selectedFile.value) return 'fa fa-file text-gray-400'
-      
+
       const extension = selectedFile.value.name.split('.').pop().toLowerCase()
       const iconMap = {
         'mp3': 'fa-file-audio-o text-purple-500',
@@ -175,7 +148,7 @@ export default {
         'flac': 'fa-file-audio-o text-purple-500',
         'wma': 'fa-file-audio-o text-purple-500'
       }
-      
+
       return iconMap[extension] || 'fa-file text-gray-400'
     })
 
@@ -183,7 +156,7 @@ export default {
     const handleDrop = (e) => {
       e.preventDefault()
       isDragOver.value = false
-      
+
       const files = e.dataTransfer.files
       if (files.length > 0) {
         handleFile(files[0])
@@ -201,7 +174,7 @@ export default {
       // 检查文件格式
       const allowedExtensions = ['mp3', 'wav', 'm4a', 'flac', 'wma']
       const fileExtension = file.name.split('.').pop().toLowerCase()
-      
+
       if (!allowedExtensions.includes(fileExtension)) {
         showStatus('错误', '文件格式错误，请选择支持的音频格式', 'error')
         return
@@ -305,14 +278,9 @@ export default {
 
         // 调用后端 /api/transcribe 接口
         const filename = encodeURIComponent(uploadedFilename.value || selectedFile.value.name)
-        const response = await axios.get(`/api/transcribe?filename=${filename}`)
-        // 跳转到转写页面（如果后端返回页面则直接跳转）
-        if (response && response.request && response.request.responseURL) {
-          window.location.href = response.request.responseURL
-        } else {
-          // 兜底跳转
-          router.push(`/transcribe?filename=${filename}`)
-        }
+        await axios.get(`/api/transcribe?filename=${filename}`)
+        // 直接用 router 跳转
+        router.push(`/transcribe?filename=${filename}`)
       } catch (error) {
         console.error('转写接口调用失败:', error)
         // 即使失败也继续跳转
@@ -352,4 +320,4 @@ export default {
     }
   }
 }
-</script> 
+</script>

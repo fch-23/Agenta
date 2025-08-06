@@ -17,7 +17,8 @@ app.secret_key = secrets.token_hex(16)
 
 @app.route('/')
 def index():
-    return render_template('upload.html')
+    # 前后端分离，返回JSON
+    return jsonify({'success': True, 'message': 'API index'})
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -68,8 +69,7 @@ def transcribe():
     
     threading.Thread(target=run_transcription).start()
     
-    # 直接返回转写页面，不等待结果
-    return render_template('transcription.html', transcription='')
+    return jsonify({'success': True, 'message': 'Transcription started'})
 
 @app.route('/check_transcription')
 def check_transcription():
@@ -86,24 +86,18 @@ def check_transcription():
             'completed': False
         })
 
-@app.route('/templates')
-def show_templates():
-    return render_template('templates.html')
-
-@app.route('/result')
+@app.route('/result', methods=['POST'])
 def result():
-    if session.get('run_summary', False):
-        def run_result():
-            subprocess.run(["python", "summary.py"])
-        
-        summary_file = "summary.md"
-        if os.path.exists(summary_file):
-            os.remove(summary_file)
+    # 每次POST都立即运行summary.py，异步执行
+    def run_result():
+        subprocess.run(["python", "summary.py"])
 
-        threading.Thread(target=run_result).start()
-        session.pop('run_summary', None)
-    
-    return render_template('result.html')
+    summary_file = "summary.md"
+    if os.path.exists(summary_file):
+        os.remove(summary_file)
+
+    threading.Thread(target=run_result).start()
+    return jsonify({'success': True, 'message': 'Summary generation started'})
 
 @app.route('/summary.md')
 def get_summary():
