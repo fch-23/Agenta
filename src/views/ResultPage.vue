@@ -195,15 +195,44 @@ export default defineComponent({
   methods: {
     async fetchSummaryMd() {
       try {
-        const response = await fetch('/summary.md') // 假设前后端同域，不同域需用完整URL
-        if (!response.ok) throw new Error('获取summary.md失败')
+        const response = await fetch('/summary.md')
+        if (!response.ok) {
+          // 如果文件不存在，抛出错误让catch处理
+          if (response.status === 404) throw new Error('文件不存在')
+          throw new Error('获取summary.md失败')
+        }
         const markdownContent = await response.text()
-        // 将内容设置到会议纪要编辑器
         this.editor?.commands.setContent(markdownContent)
+        this.isLoadingSummary = false // 加载成功，隐藏加载状态
+        return true // 表示成功获取
       } catch (error) {
-        console.error('加载summary.md出错:', error)
-        this.state.errorMessage = '加载会议纪要失败，请稍后重试'
+        console.log('当前未获取到summary.md，将继续尝试:', error.message)
+        return false // 表示获取失败
       }
+    },
+
+    // 新增：定时检查summary.md的方法
+    startSummaryCheck() {
+      // 立即执行一次检查
+      this.fetchSummaryMd().then(success => {
+        if (success) {
+          // 如果成功获取，清除定时器
+          if (this.summaryCheckInterval) {
+            clearInterval(this.summaryCheckInterval)
+            this.summaryCheckInterval = null
+          }
+          return
+        }
+
+        // 如果第一次失败，设置定时器每5秒检查一次
+        this.summaryCheckInterval = setInterval(async () => {
+          const success = await this.fetchSummaryMd()
+          if (success && this.summaryCheckInterval) {
+            clearInterval(this.summaryCheckInterval)
+            this.summaryCheckInterval = null
+          }
+        }, 5000) // 5秒间隔
+      })
     },
 
     initOpenAI() {
@@ -392,7 +421,7 @@ export default defineComponent({
 
   mounted() {
     this.initOpenAI()
-    this.fetchSummaryMd()
+    this.startSummaryCheck()
     this.fetchMeetingData()
     this.editor = new Editor({
       extensions: [
@@ -446,6 +475,10 @@ export default defineComponent({
 
   beforeUnmount() {
     this.editor.destroy()
+    // 组件卸载时清除定时器
+    if (this.summaryCheckInterval) {
+      clearInterval(this.summaryCheckInterval)
+    }
   },
 })
 </script>
@@ -1181,5 +1214,32 @@ $transition: all 0.25s ease; // 统一过渡动画
   background: rgba(141, 192, 117, 0.2) !important; // 淡绿色高亮
   border-radius: 2px;
   padding: 0 2px;
+}
+
+.summary-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #6da34d;
+  font-weight: 500;
+
+  .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(109, 163, 77, 0.3);
+    border-radius: 50%;
+    border-top-color: #6da34d;
+    animation: spin 1s ease-in-out infinite;
+  }
 }
 </style>
