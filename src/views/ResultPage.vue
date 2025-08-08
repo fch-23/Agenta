@@ -169,25 +169,25 @@ export default defineComponent({
             if (!this.editor) return ''
             const rawContent = this.editor.getText()
 
-            // 修正Markdown转换逻辑
+            // 增强版Markdown转换逻辑，重点处理换行
             let markdownText = rawContent
-                // 处理多行代码块（三个反引号）
+                // 先将所有换行符统一处理
+                .replace(/\r\n/g, '\n') // 处理Windows换行
+                .replace(/\r/g, '\n')   // 处理Mac老式换行
+                // 处理连续空行作为段落分隔
+                .replace(/\n{2,}/g, '\n\n')
+                // 处理单行换行（转换为<br>）
+                .replace(/([^\n])\n([^\n])/g, '$1\n\n$2')
+                // 处理代码块
                 .replace(/```([\s\S]*?)```/g, (match, code) => {
                     return '```\n' + code.trim() + '\n```'
                 })
-                // 处理单行代码块（单个反引号）
-                .replace(/`([^`\n]+?)`/g, '`$1`')
-                // 确保标题后有换行
+                // 处理标题
                 .replace(/(#{1,6} .+?)(?=\n|$)/g, '$1\n')
-                // 处理粗体和斜体
-                .replace(/\*\*([^*]+?)\*\*/g, '**$1**')
-                .replace(/\*([^*]+?)\*/g, '*$1*')
                 // 处理列表
                 .replace(/^(\s*)-\s/gm, '$1- ')
                 .replace(/^(\s*)\*\s/gm, '$1* ')
                 .replace(/^(\s*)\d+\.\s/gm, '$11. ')
-                // 合并多余空行
-                .replace(/\n{3,}/g, '\n\n')
                 .trim()
 
             return marked.parse(markdownText)
@@ -203,7 +203,11 @@ export default defineComponent({
                     if (response.status === 404) throw new Error('文件不存在')
                     throw new Error('获取summary.md失败')
                 }
-                const markdownContent = await response.text()
+                let rawText = await response.text()
+                const markdownContent = rawText
+                    .replace(/\r\n/g, '<br>') // 处理 Windows 换行
+                    .replace(/\r/g, '<br>')   // 处理老式 Mac 换行
+                    .replace(/\n/g, '<br>')   // 处理 Unix 换行
                 this.editor?.commands.setContent(markdownContent)
                 this.isLoadingSummary = false // 加载成功，隐藏加载状态
                 return true // 表示成功获取
@@ -241,17 +245,20 @@ export default defineComponent({
             try {
                 const response = await fetch('/combined_output.txt')
                 if (!response.ok) {
-                    // 如果文件不存在，抛出错误让catch处理
                     if (response.status === 404) throw new Error('文件不存在')
                     throw new Error('获取转写失败')
                 }
-                const markdownContent = await response.text()
-                this.transcribeEditor?.commands.setContent(markdownContent) // 设置到转写编辑器
-                this.isLoadingSummary = false // 加载成功，隐藏加载状态
-                return true // 表示成功获取
+                let rawText = await response.text()
+                const formattedText = rawText
+                    .replace(/\r\n/g, '<br>') // 处理 Windows 换行
+                    .replace(/\r/g, '<br>')   // 处理老式 Mac 换行
+                    .replace(/\n/g, '<br>')   // 处理 Unix 换行
+                this.transcribeEditor?.commands.setContent(formattedText)
+                this.isLoadingSummary = false
+                return true
             } catch (error) {
                 console.log('当前未获取到转写，将继续尝试:', error.message)
-                return false // 表示获取失败
+                return false
             }
         },
         onTranscribeLabelClick() {
