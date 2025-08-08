@@ -661,6 +661,11 @@ $transition: all 0.25s ease; // 统一过渡动画
     }
 }
 
+.ProseMirror:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 // 功能按钮组优化
 .button-group {
     display: flex;
