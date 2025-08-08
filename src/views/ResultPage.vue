@@ -1127,20 +1127,20 @@ $transition: all 0.25s ease; // 统一过渡动画
 }
 
 // Markdown预览样式优化
-.markdown-preview {
-    margin-top: 0;
-    padding: 10px 0; /* 减小内边距 */
-    background: transparent;
-    border-radius: 0;
-    border: none;
-    font-size: 14px; /* 减小字体 */
-    color: $text-primary;
-    height: 100%;
-    max-height: none;
-    overflow: auto;
-    width: 100%;
-    box-shadow: none;
-    line-height: 1.6; /* 减小行高 */
+ .markdown-preview {
+     margin-top: 0;
+     padding: 10px 0;
+     background: transparent;
+     border-radius: 0;
+     border: none;
+     font-size: 16px;
+     color: $text-primary;
+     height: 100%;
+     max-height: none;
+     overflow: auto;
+     width: 100%;
+     box-shadow: none;
+     line-height: 1.7;
 
     /* Markdown基础样式优化 */
     h1,
