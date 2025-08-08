@@ -454,6 +454,12 @@ export default defineComponent({
                 URL.revokeObjectURL(link.href)
             }
         },
+
+        goBack() {
+            if (confirm('确定要返回吗？未保存的更改将会丢失。')) {
+                this.$router.push('/templates');
+            }
+        }
     },
 
     watch: {
@@ -482,21 +488,7 @@ export default defineComponent({
                     }
                 })
             ],
-            content: `
-        <p>
-          # 接口学习  
-
-**时间**：2025-08-04 08:01  
-**主讲人**：未设置  
-**参会人**：未设置  
-**记录人**：未设置  
-
-## 一、分享概览  
-- **核心内容**：本次会议围绕接口设计与开发展开，涵盖接口功能划分、前后端交互流程、开发工具推荐、AI辅助编程的局限性及并发调用优化等内容。  
-- **关键结论**：接口设计需功能分离优先，开发推荐使用\`fastAPI\`和\`Postman\`工具，AI辅助编程需人工验证，并发调用需注意模型选择和token限制。  
-
-</p >
-      `,
+            content: `# 会议纪要正在加载...`,
             parseOptions: {
                 preserveWhitespace: true,
             }
