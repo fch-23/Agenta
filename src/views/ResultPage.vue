@@ -145,7 +145,7 @@ export default defineComponent({
             customPrompt: '',
             chatHistory: [],
             transcribeCollapsed: true,
-            showMarkdownPreview: false,
+            showMarkdownPreview: true,
             meetingData: {
                 transcribe: '',
                 note: '',
