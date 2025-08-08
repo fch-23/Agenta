@@ -145,14 +145,14 @@ export default {
 
             const extension = selectedFile.value.name.split('.').pop().toLowerCase()
             const iconMap = {
-                'mp3': 'fa-file-audio-o text-purple-500',
-                'wav': 'fa-file-audio-o text-purple-500',
-                'm4a': 'fa-file-audio-o text-purple-500',
-                'flac': 'fa-file-audio-o text-purple-500',
-                'wma': 'fa-file-audio-o text-purple-500'
+                'mp3': 'fa fa-volume-up text-purple-500',
+                'wav': 'fa fa-volume-up text-purple-500',
+                'm4a': 'fa fa-volume-up text-purple-500',
+                'flac': 'fa fa-volume-up text-purple-500',
+                'wma': 'fa fa-volume-up text-purple-500'
             }
 
-            return iconMap[extension] || 'fa-file text-gray-400'
+            return iconMap[extension] || 'fa fa-file text-gray-400'
         })
 
         // 方法
