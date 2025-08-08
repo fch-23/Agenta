@@ -427,15 +427,24 @@ export default defineComponent({
             this.editor?.commands.setContent(data.note || '')
         },
 
-        async saveMeetingNote() {
-            const transcribe = this.transcribeEditor?.getText() || ''
+        saveMeetingNote() {
+            // 获取会议纪要内容（用markdown格式）
             const note = this.editor?.getText() || ''
-            await fetch('http://localhost:3001/api/meeting', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ transcribe, note })
-            })
-            alert('会议纪要已保存！')
+            // 生成文件名，带时间戳，md后缀
+            const filename = `会议纪要_${new Date().toLocaleDateString().replace(/\//g, '-')}_${new Date().toLocaleTimeString().replace(/:/g, '-')}.md`
+            // 创建Blob并下载
+            const blob = new Blob([note], { type: 'text/markdown;charset=utf-8' })
+            if (window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(blob, filename)
+            } else {
+                const link = document.createElement('a')
+                link.href = URL.createObjectURL(blob)
+                link.download = filename
+                document.body.appendChild(link)
+                link.click()
+                document.body.removeChild(link)
+                URL.revokeObjectURL(link.href)
+            }
         },
     },
 
