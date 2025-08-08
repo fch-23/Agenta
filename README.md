@@ -67,7 +67,8 @@ npm install
 ```
 
 ### 2. 运行后端
-运行main.py
+
+将model文件夹放至根目录下，并运行main.py
 
 ### 3. 运行前端
 ```bash
