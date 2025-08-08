@@ -3,7 +3,7 @@
     <!-- 左侧导航栏 -->
     <aside class="w-auto bg-white border-r border-border flex flex-col h-screen">
       <!-- Agenta标识 -->
-      <div class="p-4 md:p-6 border-b border-border min-w-[120px]">
+      <div class="h-16 p-4 md:p-6 border-b border-border min-w-[120px]">
         <h1 class="text-xl font-bold text-primary">Agenta</h1>
       </div>
 

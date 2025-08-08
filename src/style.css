@@ -125,6 +125,19 @@
   .markdown-content pre {
     @apply bg-secondary p-4 rounded-lg mb-4 overflow-x-auto;
   }
+
+  .editor-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    /* 可以添加其他样式，如 padding、margin 等 */
+}
+
+.note-actions {
+    /* 如果需要按钮之间也有间距 */
+    display: flex;
+    gap: 8px;
+}
 }
 
 /* 动画 */
