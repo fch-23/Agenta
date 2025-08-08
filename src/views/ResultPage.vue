@@ -19,21 +19,21 @@
                 <div class="hint">💡 请选择需要优化的文本</div>
                 <!-- 会议纪要 -->
                 <div class="editor-block" :class="{ 'main-expanded': transcribeCollapsed }">
-                    <div class="editor-label">会议纪要</div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 0;">
+                        <div class="editor-label" style="font-weight: bold;">会议纪要</div>
+                        <!-- 按钮组 -->
+                        <div class="note-actions" style="display: flex; gap: 8px;">
+                            <button class="preview-toggle-btn" @click="showMarkdownPreview = !showMarkdownPreview"
+                                style="padding: 4px 10px; font-size: 14px; background-color: #95C11F; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                <i :class="showMarkdownPreview ? 'fa fa-pencil' : 'fa fa-eye'"
+                                    style="margin-right: 4px;"></i>
+                                {{ showMarkdownPreview ? '编辑' : '预览' }}
+                            </button>
+                        </div>
+                    </div>
                     <div class="editor-content-fixed">
                         <div v-if="showMarkdownPreview" class="markdown-preview" v-html="markdownHtml"></div>
                         <editor-content v-else :editor="editor" />
-                    </div>
-                    <!-- 美化后的按钮组，放到纪要下方 -->
-                    <div class="note-actions">
-                        <button class="preview-toggle-btn" @click="showMarkdownPreview = !showMarkdownPreview">
-                            <i :class="showMarkdownPreview ? 'fa fa-pencil' : 'fa fa-eye'"></i>
-                            {{ showMarkdownPreview ? '编辑' : '预览' }}
-                        </button>
-                        <button class="save-btn" @click="saveMeetingNote">
-                            <i class="fa fa-save"></i>
-                            保存
-                        </button>
                     </div>
                 </div>
             </div>
@@ -44,6 +44,15 @@
                 <button @click="runAiCommand('fixSpelling')" :disabled="isDisabled">纠正拼写</button>
                 <button @click="runAiCommand('translateChinese')" :disabled="isDisabled">翻译为中文</button>
                 <button @click="runAiCommand('translateEnglish')" :disabled="isDisabled">翻译为英语</button>
+            </div>
+            <!-- 底部操作按钮 -->
+            <div class="flex justify-end gap-4 mt-8">
+                <button @click="goBack" class="btn-secondary">
+                    返回
+                </button>
+                <button @click="saveMeetingNote" class="btn-primary">
+                    保存
+                </button>
             </div>
             <div v-if="state.errorMessage" class="hint error">{{ state.errorMessage }}</div>
             <div v-if="editor && editor.isEmpty" class="editor-placeholder">
