@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="button-group" style="margin-top: 18px;">
+            <div class="button-group" style="margin-top: 12px;">
                 <button @click="runAiCommand('rephrase')" :disabled="isDisabled">改写</button>
                 <button @click="runAiCommand('summarize')" :disabled="isDisabled">总结</button>
                 <button @click="runAiCommand('simplify')" :disabled="isDisabled">简化</button>
@@ -46,7 +46,7 @@
                 <button @click="runAiCommand('translateEnglish')" :disabled="isDisabled">翻译为英语</button>
             </div>
             <!-- 底部操作按钮 -->
-            <div class="flex justify-end gap-4 mt-8">
+            <div class="flex justify-end gap-4 mt-6">
                 <button @click="goBack" class="btn-secondary">
                     返回
                 </button>
@@ -125,7 +125,6 @@
 </template>
 
 <script>
-// 脚本部分保持不变（功能逻辑未修改）
 import StarterKit from '@tiptap/starter-kit'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import OpenAI from 'openai'
@@ -331,7 +330,7 @@ export default defineComponent({
                     body: JSON.stringify({
                         model: 'deepseek-chat',
                         messages: [
-                            { role: 'system', content: '你是一个智能写作助手，帮助用户处理文本。请只返回普通文本，不要使用markdown格式，如果用户不要求翻译，原文使用哪种语言，返回文本使用哪种语言。' },
+                            { role: 'system', content: '你是一个智能写作助手，帮助用户处理文本。请保持文本的格式，仅修改内容，除非用户让你修改格式。如果用户不要求翻译，原文使用哪种语言，返回文本使用哪种语言。只需要返回修改后的内容，不要前后有任何说明。' },
                             { role: 'user', content: prompt }
                         ],
                         temperature: 0.7,
@@ -537,7 +536,7 @@ export default defineComponent({
 <style lang="scss">
 // 基础变量调整为低饱和色调，提升简洁感
 $primary: #6da34d; // 主色调：低饱和绿色
-$primary-light: #f0f7f0; // 浅绿背景
+$primary-light: #f8f9fa; // 浅绿背景
 $primary-dark: #4a7d36; // 深绿文字
 $primary-accent: #8dc075; // 强调色
 $gray-light: #f8f9fa; // 浅灰背景
@@ -554,12 +553,12 @@ $transition: all 0.25s ease; // 统一过渡动画
 .ai-editor-layout {
     display: flex;
     background: $primary-light;
-    height: 100vh;
+    height: calc(100vh - 4rem); /* 减去顶部导航栏高度 */
     width: 100%;
-    font-family: "Inter", "PingFang SC", "Microsoft YaHei", Arial, sans-serif; // 现代无衬线字体
+    font-family: "Inter", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
     min-height: 0;
     overflow: hidden;
-    padding: 16px; // 整体外间距
+    padding: 12px; /* 减小整体外间距 */
     box-sizing: border-box;
 }
 
@@ -569,11 +568,11 @@ $transition: all 0.25s ease; // 统一过渡动画
     background: #fff;
     border-radius: $radius-lg;
     box-shadow: $shadow-md;
-    padding: 24px; // 内边距优化
-    margin: 0 12px 0 0; // 间距调整
+    padding: 16px; /* 减小内边距 */
+    margin: 0 8px 0 0; /* 减小间距 */
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100%; /* 适应父容器高度 */
     min-height: 0;
     overflow: hidden;
     box-sizing: border-box;
@@ -582,8 +581,10 @@ $transition: all 0.25s ease; // 统一过渡动画
 .editors-double {
     display: flex;
     flex-direction: column;
-    gap: 20px; // 编辑器间距优化
+    gap: 12px; /* 减小编辑器间距 */
     flex: 1 1 0;
+    min-height: 0; 
+    overflow: hidden;
 }
 
 .editor-block {
@@ -593,17 +594,19 @@ $transition: all 0.25s ease; // 统一过渡动画
     background: $gray-light;
     border-radius: $radius-md;
     box-shadow: $shadow-sm;
-    padding: 16px; // 内边距统一
-    transition: flex 0.3s, max-height 0.3s, box-shadow 0.2s; // 增加阴影过渡
+    padding: 12px; /* 减小内边距 */
+    transition: flex 0.3s, max-height 0.3s, box-shadow 0.2s;
+    min-height: 0;
+    overflow: hidden;
 
     &:hover {
-        box-shadow: $shadow-md; // 悬浮增强阴影
+        box-shadow: $shadow-md;
     }
 
     &.transcribe-collapsed {
         flex: 0 0 auto;
         max-height: 36px;
-        padding: 0 16px; // 折叠状态内边距
+        padding: 0 12px; /* 折叠状态内边距 */
         background: transparent;
         box-shadow: none;
         border-radius: $radius-md $radius-md 0 0;
@@ -616,10 +619,10 @@ $transition: all 0.25s ease; // 统一过渡动画
 
 .editor-label {
     font-weight: 600;
-    font-size: 16px;
+    font-size: 15px; /* 减小字体 */
     color: $primary-dark;
-    margin-bottom: 12px;
-    letter-spacing: 0.3px; // 字间距优化
+    margin-bottom: 8px; /* 减小间距 */
+    letter-spacing: 0.3px;
     display: flex;
     align-items: center;
 }
@@ -649,11 +652,11 @@ $transition: all 0.25s ease; // 统一过渡动画
         background: transparent;
         border: none;
         margin: 0;
-        padding: 8px 0; // 编辑器内边距
+        padding: 6px 0; /* 减小编辑器内边距 */
         overflow-y: auto;
         display: block;
-        line-height: 1.6; // 行高优化
-        font-size: 15px;
+        line-height: 1.5; /* 减小行高 */
+        font-size: 14px; /* 减小字体 */
         color: $text-primary;
     }
 }
@@ -662,16 +665,17 @@ $transition: all 0.25s ease; // 统一过渡动画
 .button-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px; // 按钮间距
-    margin: 16px 0 0 0;
+    gap: 8px; /* 减小按钮间距 */
+    margin: 12px 0 0 0;
+    padding-bottom: border-box;
 
     button {
         background: $primary;
         color: #fff;
         border: none;
         border-radius: $radius-sm;
-        padding: 8px 16px;
-        font-size: 14px;
+        padding: 6px 12px; /* 减小按钮尺寸 */
+        font-size: 13px; /* 减小字体 */
         font-weight: 500;
         cursor: pointer;
         transition: $transition;
@@ -682,12 +686,12 @@ $transition: all 0.25s ease; // 统一过渡动画
 
         &:hover {
             background: $primary-dark;
-            transform: translateY(-1px); // 轻微上浮效果
+            transform: translateY(-1px);
             box-shadow: 0 3px 9px rgba(109, 163, 77, 0.2);
         }
 
         &:active {
-            transform: translateY(0); // 点击回落
+            transform: translateY(0);
         }
 
         &:disabled {
@@ -704,18 +708,18 @@ $transition: all 0.25s ease; // 统一过渡动画
 .note-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 12px; // 按钮间距
-    margin-top: 16px;
+    gap: 8px; /* 减小按钮间距 */
+    margin-top: 12px; /* 减小间距 */
     margin-bottom: 0;
 
     button {
         display: flex;
         align-items: center;
-        gap: 6px; // 图标文字间距
-        padding: 9px 20px; // 按钮尺寸优化
+        gap: 4px; /* 减小图标文字间距 */
+        padding: 7px 16px; /* 减小按钮尺寸 */
         border-radius: $radius-sm;
         border: none;
-        font-size: 14px;
+        font-size: 13px; /* 减小字体 */
         font-weight: 500;
         background: $primary;
         color: #fff;
@@ -724,7 +728,7 @@ $transition: all 0.25s ease; // 统一过渡动画
         transition: $transition;
 
         i {
-            font-size: 16px; // 图标大小
+            font-size: 14px; /* 减小图标大小 */
         }
 
         &:hover {
@@ -749,32 +753,32 @@ $transition: all 0.25s ease; // 统一过渡动画
 
 // 提示文本样式
 .hint {
-    margin-bottom: 10px;
-    font-size: 14px;
+    margin-bottom: 8px; /* 减小间距 */
+    font-size: 13px; /* 减小字体 */
     color: $primary-dark;
-    padding: 6px 0; // 内边距优化
-    line-height: 1.5;
+    padding: 4px 0; /* 减小内边距 */
+    line-height: 1.4;
 
     &.error {
         color: #d93025;
         background: #fff0f0;
         border-radius: $radius-sm;
-        padding: 8px 12px; // 错误提示内边距
-        margin-top: 8px;
+        padding: 6px 10px; /* 减小错误提示内边距 */
+        margin-top: 6px;
     }
 
     &.purple-spinner {
         font-weight: 500;
-        padding: 12px 0; // 加载提示 padding
+        padding: 8px 0; /* 减小加载提示 padding */
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 6px;
 
         .spinner {
             display: inline-block;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             border: 2px solid rgba(109, 163, 77, 0.3);
             border-radius: 50%;
             border-top-color: $primary;
@@ -791,13 +795,13 @@ $transition: all 0.25s ease; // 统一过渡动画
 
 .editor-placeholder {
     color: #999;
-    padding: 20px;
+    padding: 16px; /* 减小内边距 */
     text-align: center;
     position: absolute;
     width: 100%;
     pointer-events: none;
     z-index: 1;
-    font-size: 15px;
+    font-size: 14px; /* 减小字体 */
     background: $gray-light;
     border-radius: $radius-sm;
     box-sizing: border-box;
@@ -807,15 +811,15 @@ $transition: all 0.25s ease; // 统一过渡动画
 .ai-result-panel {
     flex: 1 1 0;
     min-width: 0;
-    height: 100%;
+    height: 100%; /* 适应父容器高度 */
     display: flex;
     flex-direction: column;
-    gap: 16px; // 内部间距
+    gap: 12px; /* 减小内部间距 */
     background: #fff;
     border-radius: $radius-lg;
     box-shadow: $shadow-md;
-    padding: 24px; // 内边距
-    margin: 0 0 0 12px; // 间距调整
+    padding: 16px; /* 减小内边距 */
+    margin: 0 0 0 8px; /* 减小间距 */
     position: relative;
     min-height: 0;
     overflow: hidden;
@@ -824,34 +828,34 @@ $transition: all 0.25s ease; // 统一过渡动画
 
 .ai-result-title {
     font-weight: 600;
-    font-size: 18px;
-    margin-bottom: 4px; // 标题下方间距
+    font-size: 16px; /* 减小字体 */
+    margin-bottom: 2px; /* 减小标题下方间距 */
     color: $primary-dark;
     letter-spacing: 0.3px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid $gray-mid; // 标题下分割线
+    padding-bottom: 6px; /* 减小下划线间距 */
+    border-bottom: 1px solid $gray-mid;
 }
 
 .ai-chat-history-scroll {
     flex: 1 1 0;
     min-height: 0;
-    height: 100%;
+    max-height: calc(100% - 120px); /* 限制最大高度，为输入区留出空间 */
     overflow-y: auto;
-    padding: 8px 4px; // 内边距优化
-    margin-bottom: 8px;
+    padding: 6px 3px; /* 减小内边距 */
+    margin-bottom: 6px; /* 减小间距 */
     scrollbar-width: thin;
     scrollbar-color: $primary $primary-light;
     background: $gray-light;
     border-radius: $radius-md;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03); // 内阴影增强质感
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03);
 
     &::-webkit-scrollbar {
-        width: 6px; // 滚动条宽度
+        width: 5px; /* 减小滚动条宽度 */
     }
 
     &::-webkit-scrollbar-thumb {
         background: $primary;
-        border-radius: 3px; // 滚动条圆角
+        border-radius: 3px;
     }
 
     &::-webkit-scrollbar-track {
@@ -862,57 +866,56 @@ $transition: all 0.25s ease; // 统一过渡动画
 
 // 聊天记录样式
 .chat-item {
-    margin-bottom: 14px; // 消息间距
-    padding: 0 8px; // 内边距
+    margin-bottom: 10px; /* 减小消息间距 */
+    padding: 0 6px; /* 减小内边距 */
 }
 
 .chat-row {
     display: flex;
     justify-content: flex-start;
     align-items: flex-end;
-    gap: 12px; // 间距优化
+    gap: 8px; /* 减小间距 */
 }
 
 .chat-user-side {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    max-width: 75%; // 宽度调整
-    margin-left: auto;
+    max-width: 75%;
 }
 
 .chat-ai-side {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    max-width: 75%; // 宽度调整
+    max-width: 75%;
 }
 
 .chat-bubble {
     position: relative;
-    padding: 10px 14px; // 内边距优化
-    border-radius: 16px; // 气泡圆角
-    margin-bottom: 4px;
+    padding: 8px 12px; /* 减小内边距 */
+    border-radius: 14px; /* 减小气泡圆角 */
+    margin-bottom: 3px; /* 减小间距 */
     max-width: 100%;
-    word-break: break-word; // 文字换行优化
-    font-size: 14px;
-    line-height: 1.6; // 行高优化
+    word-break: break-word;
+    font-size: 13px; /* 减小字体 */
+    line-height: 1.5; /* 减小行高 */
     box-shadow: $shadow-sm;
 
     &.ai {
         background: #fff;
         color: $text-primary;
-        border-bottom-left-radius: 4px; // 左侧气泡左下角圆角
+        border-bottom-left-radius: 4px;
         border-top-left-radius: 4px;
-        margin-left: 4px;
+        margin-left: 3px;
         align-self: flex-start;
 
         &::before {
             content: "";
             position: absolute;
-            left: -6px;
-            top: 12px;
-            border-width: 6px 8px 6px 0;
+            left: -5px;
+            top: 10px;
+            border-width: 5px 7px 5px 0;
             border-style: solid;
             border-color: transparent #fff transparent transparent;
         }
@@ -921,17 +924,17 @@ $transition: all 0.25s ease; // 统一过渡动画
     &.user {
         background: $primary;
         color: #fff;
-        border-bottom-right-radius: 4px; // 右侧气泡右下角圆角
+        border-bottom-right-radius: 4px;
         border-top-right-radius: 4px;
-        margin-right: 4px;
+        margin-right: 3px;
         align-self: flex-end;
 
         &::before {
             content: "";
             position: absolute;
-            right: -6px;
-            top: 12px;
-            border-width: 6px 0 6px 8px;
+            right: -5px;
+            top: 10px;
+            border-width: 5px 0 5px 7px;
             border-style: solid;
             border-color: transparent transparent transparent $primary;
         }
@@ -941,21 +944,21 @@ $transition: all 0.25s ease; // 统一过渡动画
 // 聊天操作按钮
 .chat-actions {
     display: flex;
-    gap: 6px; // 按钮间距
-    margin-top: 2px;
+    gap: 5px; /* 减小按钮间距 */
+    margin-top: 1px;
 
     &.left {
         justify-content: flex-start;
-        padding-left: 24px; // 左对齐偏移
+        padding-left: 20px; /* 减小左对齐偏移 */
     }
 
     button {
         background: $primary-light;
         color: $primary-dark;
         border: none;
-        border-radius: 4px; // 按钮圆角
-        padding: 3px 10px; // 按钮尺寸
-        font-size: 12px; // 字体大小
+        border-radius: 3px; /* 减小按钮圆角 */
+        padding: 2px 8px; /* 减小按钮尺寸 */
+        font-size: 11px; /* 减小字体大小 */
         cursor: pointer;
         box-shadow: $shadow-sm;
         transition: $transition;
@@ -979,61 +982,64 @@ $transition: all 0.25s ease; // 统一过渡动画
     font-size: 13px;
     color: $text-secondary;
     display: flex;
-    align-items: flex-start; // 对齐优化
+    align-items: flex-start;
     gap: 6px;
-
+    flex-wrap: wrap;
+    word-break: break-all;
     .chat-bubble.user {
         display: inline-block;
         margin-left: 0;
         background: $primary-light;
         padding: 6px 12px;
         border-radius: 10px;
-        max-width: 80%;
+        max-width: 100%;
         word-break: break-all;
         font-size: 14px;
         box-shadow: $shadow-sm;
         color: $primary-dark;
         max-height: 4.5em;
         overflow-y: auto;
+        overflow-x: hidden;
+        white-space: pre-line;
     }
 }
 
 // 自定义提示输入框
 .ai-custom-prompt {
     display: flex;
-    gap: 8px; // 间距优化
-    margin-bottom: 4px;
+    gap: 6px; /* 减小间距 */
+    margin-bottom: 3px; /* 减小间距 */
 
     input {
         flex: 1;
-        padding: 10px 14px; // 输入框内边距
+        padding: 8px 12px; /* 减小输入框内边距 */
         border-radius: $radius-sm;
         border: 1px solid $primary-light;
-        font-size: 14px;
+        font-size: 13px; /* 减小字体 */
         background: $gray-light;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05); // 内阴影
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
         color: $text-primary;
         transition: $transition;
 
         &:focus {
             outline: none;
-            border-color: $primary; // 聚焦边框色
-            box-shadow: 0 0 0 2px rgba(109, 163, 77, 0.2); // 聚焦发光效果
+            border-color: $primary;
+            box-shadow: 0 0 0 2px rgba(109, 163, 77, 0.2);
         }
 
         &::placeholder {
-            color: #999; // 占位符颜色
+            color: #999;
         }
     }
 
     button {
-        padding: 0 18px; // 按钮尺寸
+        padding: 0 14px; /* 减小按钮尺寸 */
         border-radius: $radius-sm;
         background: $primary;
         color: #fff;
         border: none;
         cursor: pointer;
-        font-size: 14px;
+        font-size: 13px; /* 减小字体 */
         font-weight: 500;
         box-shadow: $shadow-sm;
         transition: $transition;
@@ -1061,13 +1067,13 @@ $transition: all 0.25s ease; // 统一过渡动画
 .transcribe-label {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px; /* 减小间距 */
 }
 
 .triangle {
     display: inline-block;
-    transition: transform 0.2s ease; // 平滑旋转
-    font-size: 14px;
+    transition: transform 0.2s ease;
+    font-size: 13px; /* 减小字体 */
     color: $primary;
 
     &.expanded {
@@ -1078,7 +1084,7 @@ $transition: all 0.25s ease; // 统一过渡动画
 // 折叠过渡动画
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.2s ease, transform 0.2s ease; // 增加位移动画
+    transition: opacity 0.2s ease, transform 0.2s ease;
     transform: translateY(0);
     opacity: 1;
 }
@@ -1086,7 +1092,7 @@ $transition: all 0.25s ease; // 统一过渡动画
 .fade-enter-from,
 .fade-leave-to {
     opacity: 0;
-    transform: translateY(-8px); // 入场/离场位移
+    transform: translateY(-8px);
 }
 
 // 空状态样式
@@ -1095,18 +1101,19 @@ $transition: all 0.25s ease; // 统一过渡动画
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 80%;
+    height: 70%; /* 减小高度 */
     color: #b7e28a;
     user-select: none;
     pointer-events: none;
 
     .ai-empty-icon {
-        margin-bottom: 16px; // 图标间距
-        opacity: 0.8; // 轻微透明
+        margin-bottom: 12px; /* 减小图标间距 */
+        opacity: 0.8;
+        transform: scale(0.9); /* 缩小图标 */
     }
 
     .ai-empty-text {
-        font-size: 16px;
+        font-size: 14px; /* 减小字体 */
         color: $primary;
         font-weight: 500;
         letter-spacing: 0.3px;
@@ -1117,18 +1124,18 @@ $transition: all 0.25s ease; // 统一过渡动画
 // Markdown预览样式优化
 .markdown-preview {
     margin-top: 0;
-    padding: 12px 0; // 内边距
+    padding: 10px 0; /* 减小内边距 */
     background: transparent;
     border-radius: 0;
     border: none;
-    font-size: 15px;
+    font-size: 14px; /* 减小字体 */
     color: $text-primary;
     height: 100%;
     max-height: none;
     overflow: auto;
     width: 100%;
     box-shadow: none;
-    line-height: 1.7; // 行高优化
+    line-height: 1.6; /* 减小行高 */
 
     /* Markdown基础样式优化 */
     h1,
@@ -1138,49 +1145,49 @@ $transition: all 0.25s ease; // 统一过渡动画
     h5,
     h6 {
         font-weight: 600;
-        margin: 1.2em 0 0.6em 0; // 标题间距
+        margin: 1em 0 0.5em 0; /* 减小标题间距 */
         color: $primary-dark;
-        line-height: 1.4;
+        line-height: 1.3;
     }
 
     h1 {
-        font-size: 1.8em;
+        font-size: 1.6em; /* 减小字体 */
         border-bottom: 2px solid $primary-light;
-        padding-bottom: 0.3em;
-        margin-top: 0.5em;
+        padding-bottom: 0.2em;
+        margin-top: 0.4em;
     }
 
     h2 {
-        font-size: 1.5em;
+        font-size: 1.3em; /* 减小字体 */
         border-bottom: 1px solid $primary-light;
-        padding-bottom: 0.2em;
+        padding-bottom: 0.1em;
     }
 
     h3 {
-        font-size: 1.3em;
+        font-size: 1.1em; /* 减小字体 */
         color: $primary;
     }
 
     h4,
     h5,
     h6 {
-        font-size: 1.1em;
+        font-size: 1em; /* 减小字体 */
     }
 
     p {
-        margin: 0.8em 0; // 段落间距
-        line-height: 1.7;
+        margin: 0.6em 0; /* 减小段落间距 */
+        line-height: 1.6;
     }
 
     ul,
     ol {
-        margin: 0.8em 0;
-        padding-left: 1.8em; // 列表缩进
+        margin: 0.6em 0; /* 减小间距 */
+        padding-left: 1.5em; /* 减小列表缩进 */
     }
 
     li {
-        margin: 0.4em 0;
-        line-height: 1.6;
+        margin: 0.3em 0; /* 减小间距 */
+        line-height: 1.5;
     }
 
     // 嵌套列表样式
@@ -1188,24 +1195,24 @@ $transition: all 0.25s ease; // 统一过渡动画
     ol ol,
     ul ol,
     ol ul {
-        margin-left: 0.5em;
-        padding-left: 1em;
+        margin-left: 0.4em;
+        padding-left: 0.8em;
     }
 
     table {
         border-collapse: collapse;
-        margin: 1.2em 0;
+        margin: 1em 0; /* 减小间距 */
         width: 100%;
-        font-size: 14px;
+        font-size: 13px; /* 减小字体 */
         background: #fff;
         border-radius: $radius-sm;
-        overflow: hidden; // 表格圆角
+        overflow: hidden;
     }
 
     th,
     td {
         border: 1px solid $gray-mid;
-        padding: 8px 12px; // 单元格内边距
+        padding: 6px 10px; /* 减小单元格内边距 */
         text-align: left;
     }
 
@@ -1217,19 +1224,19 @@ $transition: all 0.25s ease; // 统一过渡动画
 
     code {
         background: $primary-light;
-        border-radius: 4px;
-        padding: 0.2em 0.4em;
-        font-size: 13px;
+        border-radius: 3px;
+        padding: 0.1em 0.3em; /* 减小内边距 */
+        font-size: 12px; /* 减小字体 */
         color: $primary-dark;
         font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
     }
 
     pre code {
         display: block;
-        padding: 12px;
+        padding: 10px; /* 减小内边距 */
         background: $gray-light;
         border-radius: $radius-sm;
-        font-size: 13px;
+        font-size: 12px; /* 减小字体 */
         overflow-x: auto;
         border: 1px solid $gray-mid;
     }
@@ -1237,10 +1244,10 @@ $transition: all 0.25s ease; // 统一过渡动画
     blockquote {
         border-left: 3px solid $primary;
         background: $primary-light;
-        margin: 1em 0;
-        padding: 0.6em 1em;
+        margin: 0.8em 0; /* 减小间距 */
+        padding: 0.5em 0.8em; /* 减小内边距 */
         color: $text-secondary;
-        border-radius: 0 $radius-sm $radius-sm 0; // 引用圆角
+        border-radius: 0 $radius-sm $radius-sm 0;
     }
 
     strong {
@@ -1256,13 +1263,13 @@ $transition: all 0.25s ease; // 统一过渡动画
     hr {
         border: none;
         border-top: 1px solid $gray-mid;
-        margin: 1.5em 0;
+        margin: 1.2em 0; /* 减小间距 */
     }
 }
 
 // 选中高亮样式
 .ai-highlight {
-    background: rgba(141, 192, 117, 0.2) !important; // 淡绿色高亮
+    background: rgba(141, 192, 117, 0.2) !important;
     border-radius: 2px;
     padding: 0 2px;
 }
@@ -1273,21 +1280,22 @@ $transition: all 0.25s ease; // 统一过渡动画
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(255, 255, 255, 0.9);
-    padding: 16px 24px;
-    border-radius: 8px;
+    padding: 12px 20px; /* 减小内边距 */
+    border-radius: 6px; /* 减小圆角 */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     z-index: 100;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px; /* 减小间距 */
     color: #6da34d;
     font-weight: 500;
+    font-size: 13px; /* 减小字体 */
 
     .spinner {
         display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid rgba(109, 163, 77, 0.3);
+        width: 16px; /* 减小尺寸 */
+        height: 16px;
+        border: 2px solid rgba(109, 163, 77, 0.3);
         border-radius: 50%;
         border-top-color: #6da34d;
         animation: spin 1s ease-in-out infinite;
