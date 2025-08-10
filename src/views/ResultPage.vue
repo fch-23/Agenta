@@ -24,6 +24,7 @@
                         <!-- 按钮组 -->
                         <div class="note-actions" style="display: flex; gap: 8px;">
                             <button class="preview-toggle-btn" @click="showMarkdownPreview = !showMarkdownPreview"
+                            :disabled="isLoadingSummary"
                                 style="padding: 4px 10px; font-size: 14px; background-color: #95C11F; color: white; border: none; border-radius: 4px; cursor: pointer;">
                                 <i :class="showMarkdownPreview ? 'fa fa-pencil' : 'fa fa-eye'"
                                     style="margin-right: 4px;"></i>
@@ -32,6 +33,15 @@
                         </div>
                     </div>
                     <div class="editor-content-fixed">
+                        <div v-if="isLoadingSummary" class="loading-container">
+                            <div class="loading-animation">
+                                <div class="pulse-circle"></div>
+                                <div class="pulse-circle"></div>
+                                <div class="pulse-circle"></div>
+                            </div>
+                            <p class="loading-text">正在等待会议纪要生成...</p>
+                            <p class="loading-subtext">将持续检查文件状态</p>
+                        </div>
                         <div v-if="showMarkdownPreview" class="markdown-preview" v-html="markdownHtml"></div>
                         <editor-content v-else :editor="editor" />
                     </div>
@@ -151,6 +161,8 @@ export default defineComponent({
             chatHistory: [],
             transcribeCollapsed: true,
             showMarkdownPreview: true,
+            isLoadingSummary: true,
+            summaryCheckInterval: null,
             meetingData: {
                 transcribe: '',
                 note: '',
@@ -259,7 +271,6 @@ export default defineComponent({
                     .replace(/\r/g, '<br>')   // 处理老式 Mac 换行
                     .replace(/\n/g, '<br>')   // 处理 Unix 换行
                 this.transcribeEditor?.commands.setContent(formattedText)
-                this.isLoadingSummary = false
                 return true
             } catch (error) {
                 console.log('当前未获取到转写，将继续尝试:', error.message)
@@ -485,7 +496,7 @@ export default defineComponent({
                     }
                 })
             ],
-            content: `# 会议纪要正在加载...`,
+            content: '',
             parseOptions: {
                 preserveWhitespace: true,
             }
@@ -1308,6 +1319,87 @@ $transition: all 0.25s ease; // 统一过渡动画
         border-radius: 50%;
         border-top-color: #6da34d;
         animation: spin 1s ease-in-out infinite;
+    }
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    background-color: $gray-light;
+    border-radius: $radius-sm;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.loading-animation {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.pulse-circle {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 50%;
+    background-color: $primary;
+    animation: pulse 1.4s infinite ease-in-out both;
+
+    &:nth-child(1) {
+        animation-delay: -0.32s;
+    }
+
+    &:nth-child(2) {
+        animation-delay: -0.16s;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+        opacity: 0.6;
+    }
+
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.loading-text {
+    font-size: 15px;
+    color: $primary-dark;
+    margin: 0 0 0.5rem 0;
+    font-weight: 500;
+}
+
+.loading-subtext {
+    font-size: 13px;
+    color: $text-secondary;
+    margin: 0;
+}
+
+// 确保编辑器在加载时不显示
+.editor-content-fixed {
+
+    >.tiptap-editor,
+    >.ProseMirror {
+        display: none; // 默认隐藏编辑器内容
+    }
+
+    // 当加载完成后显示编辑器
+    &:not(:has(.loading-container)) {
+
+        >.tiptap-editor,
+        >.ProseMirror {
+            display: block;
+        }
     }
 }
 </style>
